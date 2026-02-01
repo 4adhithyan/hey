@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For You</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            background: #fff0f3;
+            font-family: 'Poppins', sans-serif;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        h1 { font-family: 'Playfair Display', serif; }
+        
+        #no-button {
+            /* Smooth sliding transition */
+            transition: left 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), 
+                        top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: absolute;
+            z-index: 50;
+        }
+        
+        .celebration-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: white;
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="main-content" class="text-center px-6">
+        <h1 class="text-5xl md:text-7xl font-bold text-gray-800 mb-4">Will you be my</h1>
+        <h1 class="text-6xl md:text-8xl font-bold text-pink-600 italic mb-20">Valentine?</h1>
+        
+        <div class="flex flex-col md:flex-row justify-center items-center gap-12 relative h-32">
+            <button id="yes-button" class="px-14 py-6 bg-pink-500 text-white font-bold rounded-3xl text-3xl shadow-2xl hover:scale-110 active:scale-95 transition-all">
+                Yes!
+            </button>
+            
+            <button id="no-button" class="px-10 py-4 bg-white text-gray-400 font-medium rounded-2xl text-xl border-2 border-gray-100 shadow-sm pointer-events-auto">
+                No
+            </button>
+        </div>
+    </div>
+
+    <div id="celebration" class="celebration-overlay">
+        <h2 class="text-5xl font-bold text-pink-600 mb-8">Yay! ❤️</h2>
+        <div class="rounded-3xl overflow-hidden shadow-2xl">
+            <iframe width="315" height="560" src="https://www.youtube.com/embed/fE2h3l67y90?autoplay=1" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+        </div>
+    </div>
+
+    <script>
+        const noBtn = document.getElementById('no-button');
+        const yesBtn = document.getElementById('yes-button');
+        const celebration = document.getElementById('celebration');
+
+        // Initial position setup
+        let initialPos = noBtn.getBoundingClientRect();
+        noBtn.style.left = `${initialPos.left}px`;
+        noBtn.style.top = `${initialPos.top}px`;
+
+        document.addEventListener('mousemove', (e) => {
+            const mouseX = e.clientX;
+            const mouseY = e.clientY;
+            
+            const btnRect = noBtn.getBoundingClientRect();
+            const btnCenterX = btnRect.left + btnRect.width / 2;
+            const btnCenterY = btnRect.top + btnRect.height / 2;
+
+            // Calculate distance between mouse and button center
+            const distance = Math.hypot(mouseX - btnCenterX, mouseY - btnCenterY);
+
+            // If mouse gets within 150 pixels, move the button
+            if (distance < 150) {
+                const angle = Math.atan2(mouseY - btnCenterY, mouseX - btnCenterX);
